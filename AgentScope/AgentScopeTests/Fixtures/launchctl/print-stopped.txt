@@ -1,0 +1,4 @@
+state = stopped
+last exit code = 1
+program = /usr/bin/python3
+unknown field = ignored

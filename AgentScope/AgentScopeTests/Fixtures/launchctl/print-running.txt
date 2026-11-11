@@ -1,0 +1,6 @@
+state = running
+pid = 4242
+last exit code = 0
+program = /usr/bin/python3
+path = /Users/test/Library/LaunchAgents/com.example.agent.plist
+unknown field = ignored

@@ -1,0 +1,506 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000010000000000000001 /* AgentScopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000001 /* AgentScopeApp.swift */; };
+		A10000010000000000000002 /* AgentScopeCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000002 /* AgentScopeCore.swift */; };
+		A10000010000000000000003 /* ServiceItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000003 /* ServiceItemTests.swift */; };
+		A10000010000000000000004 /* AgentScopeCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* AgentScopeCore.framework */; };
+		A10000010000000000000005 /* AgentScopeCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* AgentScopeCore.framework */; };
+		A10000010000000000000039 /* AgentScopeCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20000010000000000000005 /* AgentScopeCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A10000010000000000000006 /* ServiceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000007 /* ServiceItem.swift */; };
+		A10000010000000000000007 /* SourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000008 /* SourceType.swift */; };
+		A10000010000000000000008 /* ServiceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000009 /* ServiceState.swift */; };
+		A10000010000000000000009 /* OperationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000010 /* OperationRecord.swift */; };
+		A10000010000000000000010 /* CommandResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000011 /* CommandResult.swift */; };
+		A10000010000000000000011 /* CommandRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000012 /* CommandRunner.swift */; };
+		A10000010000000000000012 /* LaunchctlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000013 /* LaunchctlParser.swift */; };
+		A10000010000000000000013 /* CommandRunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000014 /* CommandRunnerTests.swift */; };
+		A10000010000000000000014 /* LaunchAgentCollectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000015 /* LaunchAgentCollectorTests.swift */; };
+		A10000010000000000000015 /* ValidityCheckerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000016 /* ValidityCheckerTests.swift */; };
+		A10000010000000000000016 /* Collector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000017 /* Collector.swift */; };
+		A10000010000000000000017 /* LaunchAgentCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000018 /* LaunchAgentCollector.swift */; };
+		A10000010000000000000018 /* ValidityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000019 /* ValidityChecker.swift */; };
+		A10000010000000000000019 /* SignatureInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000020 /* SignatureInspector.swift */; };
+		A10000010000000000000020 /* ProcessCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000021 /* ProcessCollector.swift */; };
+		A10000010000000000000021 /* ProcessCollectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000022 /* ProcessCollectorTests.swift */; };
+		A10000010000000000000022 /* LaunchAgentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000023 /* LaunchAgentController.swift */; };
+		A10000010000000000000023 /* LocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000024 /* LocalStore.swift */; };
+		A10000010000000000000024 /* LaunchAgentControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000025 /* LaunchAgentControllerTests.swift */; };
+		A10000010000000000000025 /* ServiceInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000026 /* ServiceInventory.swift */; };
+		A10000010000000000000026 /* ServiceInventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000027 /* ServiceInventoryTests.swift */; };
+		A10000010000000000000027 /* ServiceControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000028 /* ServiceControlling.swift */; };
+		A10000010000000000000028 /* DashboardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000029 /* DashboardState.swift */; };
+		A10000010000000000000029 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000030 /* DashboardViewModel.swift */; };
+		A10000010000000000000030 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000031 /* DashboardViewModelTests.swift */; };
+		A10000010000000000000037 /* ProductionServiceInventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000038 /* ProductionServiceInventoryTests.swift */; };
+		A10000010000000000000031 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000032 /* DashboardView.swift */; };
+		A10000010000000000000032 /* SourceSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000033 /* SourceSidebar.swift */; };
+		A10000010000000000000033 /* ServiceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000034 /* ServiceListView.swift */; };
+		A10000010000000000000034 /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000035 /* ServiceDetailView.swift */; };
+		A10000010000000000000035 /* OperationConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000036 /* OperationConfirmationView.swift */; };
+		A10000010000000000000040 /* AuditModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000040 /* AuditModels.swift */; };
+		A10000010000000000000041 /* LaunchdCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000041 /* LaunchdCollector.swift */; };
+		A10000010000000000000042 /* ScheduledSourceCollectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000042 /* ScheduledSourceCollectors.swift */; };
+		A10000010000000000000043 /* ScheduledCollectorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000043 /* ScheduledCollectorsTests.swift */; };
+		A10000010000000000000044 /* EcosystemCollectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000044 /* EcosystemCollectors.swift */; };
+		A10000010000000000000045 /* EcosystemCollectorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000045 /* EcosystemCollectorsTests.swift */; };
+		A10000010000000000000046 /* AuditAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000046 /* AuditAnalysis.swift */; };
+		A10000010000000000000047 /* AuditAnalysisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000047 /* AuditAnalysisTests.swift */; };
+		A10000010000000000000048 /* AnalysisProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000048 /* AnalysisProvider.swift */; };
+		A10000010000000000000049 /* AnalysisProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000049 /* AnalysisProviderTests.swift */; };
+		A1000001000000000000004A /* CodeSignatureReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000004A /* CodeSignatureReader.swift */; };
+		A1000001000000000000004B /* AppleItemFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000004B /* AppleItemFilter.swift */; };
+		A1000001000000000000004C /* ThirdPartyScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000004C /* ThirdPartyScopeTests.swift */; };
+		A1000001000000000000004D /* PurposeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000004D /* PurposeModels.swift */; };
+		A1000001000000000000004E /* LiveInventoryProbeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000004E /* LiveInventoryProbeTests.swift */; };
+		A1000001000000000000004F /* SystemLevelCollectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000004F /* SystemLevelCollectors.swift */; };
+		A10000010000000000000050 /* ResidentProcessScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000050 /* ResidentProcessScanner.swift */; };
+		A10000010000000000000051 /* SystemLevelCollectorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000051 /* SystemLevelCollectorsTests.swift */; };
+		A10000010000000000000052 /* KnowledgeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000052 /* KnowledgeBase.swift */; };
+		A10000010000000000000053 /* ItemExplainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000053 /* ItemExplainer.swift */; };
+		A10000010000000000000054 /* ItemExplainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000054 /* ItemExplainerTests.swift */; };
+		A10000010000000000000055 /* VendorGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000055 /* VendorGrouping.swift */; };
+		A10000010000000000000056 /* VendorGroupListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000056 /* VendorGroupListView.swift */; };
+		A10000010000000000000057 /* VendorGroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000057 /* VendorGroupingTests.swift */; };
+		A10000010000000000000058 /* BackgroundTaskScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000058 /* BackgroundTaskScan.swift */; };
+		A10000010000000000000059 /* BackgroundTaskScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000059 /* BackgroundTaskScanTests.swift */; };
+		A1000001000000000000005A /* ScheduleCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000005A /* ScheduleCalculator.swift */; };
+		A1000001000000000000005B /* ScheduleCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000005B /* ScheduleCalculatorTests.swift */; };
+		A1000001000000000000005C /* UninstallPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000005C /* UninstallPlanner.swift */; };
+		A1000001000000000000005D /* UninstallExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000005D /* UninstallExecutor.swift */; };
+		A1000001000000000000005E /* UninstallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000005E /* UninstallTests.swift */; };
+		A1000001000000000000005F /* DashboardViewModel+Uninstall.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001000000000000005F /* DashboardViewModel+Uninstall.swift */; };
+		A10000010000000000000060 /* UIScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000060 /* UIScale.swift */; };
+		A10000010000000000000061 /* UninstallConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000061 /* UninstallConfirmationView.swift */; };
+		A10000010000000000000062 /* AIProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000062 /* AIProviders.swift */; };
+		A10000010000000000000063 /* AIProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000063 /* AIProvidersTests.swift */; };
+		A10000010000000000000070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000010000000000000070 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000010000000000000001 /* AgentScopeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentScopeApp.swift; sourceTree = "<group>"; };
+		A20000010000000000000002 /* AgentScopeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentScopeCore.swift; sourceTree = "<group>"; };
+		A20000010000000000000003 /* ServiceItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceItemTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000004 /* AgentScope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgentScope.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000010000000000000005 /* AgentScopeCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AgentScopeCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000010000000000000006 /* AgentScopeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AgentScopeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000010000000000000007 /* ServiceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceItem.swift; sourceTree = "<group>"; };
+		A20000010000000000000008 /* SourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceType.swift; sourceTree = "<group>"; };
+		A20000010000000000000009 /* ServiceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceState.swift; sourceTree = "<group>"; };
+		A20000010000000000000010 /* OperationRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationRecord.swift; sourceTree = "<group>"; };
+		A20000010000000000000011 /* CommandResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandResult.swift; sourceTree = "<group>"; };
+		A20000010000000000000012 /* CommandRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandRunner.swift; sourceTree = "<group>"; };
+		A20000010000000000000013 /* LaunchctlParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchctlParser.swift; sourceTree = "<group>"; };
+		A20000010000000000000014 /* CommandRunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandRunnerTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000015 /* LaunchAgentCollectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAgentCollectorTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000016 /* ValidityCheckerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidityCheckerTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000017 /* Collector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collector.swift; sourceTree = "<group>"; };
+		A20000010000000000000018 /* LaunchAgentCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAgentCollector.swift; sourceTree = "<group>"; };
+		A20000010000000000000019 /* ValidityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidityChecker.swift; sourceTree = "<group>"; };
+		A20000010000000000000020 /* SignatureInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureInspector.swift; sourceTree = "<group>"; };
+		A20000010000000000000021 /* ProcessCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCollector.swift; sourceTree = "<group>"; };
+		A20000010000000000000022 /* ProcessCollectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCollectorTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000023 /* LaunchAgentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAgentController.swift; sourceTree = "<group>"; };
+		A20000010000000000000024 /* LocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore.swift; sourceTree = "<group>"; };
+		A20000010000000000000025 /* LaunchAgentControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAgentControllerTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000026 /* ServiceInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceInventory.swift; sourceTree = "<group>"; };
+		A20000010000000000000027 /* ServiceInventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceInventoryTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000028 /* ServiceControlling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceControlling.swift; sourceTree = "<group>"; };
+		A20000010000000000000029 /* DashboardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardState.swift; sourceTree = "<group>"; };
+		A20000010000000000000030 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		A20000010000000000000031 /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000038 /* ProductionServiceInventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductionServiceInventoryTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000032 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		A20000010000000000000033 /* SourceSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceSidebar.swift; sourceTree = "<group>"; };
+		A20000010000000000000034 /* ServiceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceListView.swift; sourceTree = "<group>"; };
+		A20000010000000000000035 /* ServiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceDetailView.swift; sourceTree = "<group>"; };
+		A20000010000000000000036 /* OperationConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationConfirmationView.swift; sourceTree = "<group>"; };
+		A20000010000000000000040 /* AuditModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditModels.swift; sourceTree = "<group>"; };
+		A20000010000000000000041 /* LaunchdCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchdCollector.swift; sourceTree = "<group>"; };
+		A20000010000000000000042 /* ScheduledSourceCollectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledSourceCollectors.swift; sourceTree = "<group>"; };
+		A20000010000000000000043 /* ScheduledCollectorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledCollectorsTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000044 /* EcosystemCollectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosystemCollectors.swift; sourceTree = "<group>"; };
+		A20000010000000000000045 /* EcosystemCollectorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosystemCollectorsTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000046 /* AuditAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditAnalysis.swift; sourceTree = "<group>"; };
+		A20000010000000000000047 /* AuditAnalysisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditAnalysisTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000048 /* AnalysisProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisProvider.swift; sourceTree = "<group>"; };
+		A20000010000000000000049 /* AnalysisProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisProviderTests.swift; sourceTree = "<group>"; };
+		A2000001000000000000004A /* CodeSignatureReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeSignatureReader.swift; sourceTree = "<group>"; };
+		A2000001000000000000004B /* AppleItemFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleItemFilter.swift; sourceTree = "<group>"; };
+		A2000001000000000000004C /* ThirdPartyScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdPartyScopeTests.swift; sourceTree = "<group>"; };
+		A2000001000000000000004D /* PurposeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeModels.swift; sourceTree = "<group>"; };
+		A2000001000000000000004E /* LiveInventoryProbeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveInventoryProbeTests.swift; sourceTree = "<group>"; };
+		A2000001000000000000004F /* SystemLevelCollectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemLevelCollectors.swift; sourceTree = "<group>"; };
+		A20000010000000000000050 /* ResidentProcessScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentProcessScanner.swift; sourceTree = "<group>"; };
+		A20000010000000000000051 /* SystemLevelCollectorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemLevelCollectorsTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000052 /* KnowledgeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowledgeBase.swift; sourceTree = "<group>"; };
+		A20000010000000000000053 /* ItemExplainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemExplainer.swift; sourceTree = "<group>"; };
+		A20000010000000000000054 /* ItemExplainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemExplainerTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000055 /* VendorGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorGrouping.swift; sourceTree = "<group>"; };
+		A20000010000000000000056 /* VendorGroupListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorGroupListView.swift; sourceTree = "<group>"; };
+		A20000010000000000000057 /* VendorGroupingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorGroupingTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000058 /* BackgroundTaskScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskScan.swift; sourceTree = "<group>"; };
+		A20000010000000000000059 /* BackgroundTaskScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTaskScanTests.swift; sourceTree = "<group>"; };
+		A2000001000000000000005A /* ScheduleCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCalculator.swift; sourceTree = "<group>"; };
+		A2000001000000000000005B /* ScheduleCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCalculatorTests.swift; sourceTree = "<group>"; };
+		A2000001000000000000005C /* UninstallPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UninstallPlanner.swift; sourceTree = "<group>"; };
+		A2000001000000000000005D /* UninstallExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UninstallExecutor.swift; sourceTree = "<group>"; };
+		A2000001000000000000005E /* UninstallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UninstallTests.swift; sourceTree = "<group>"; };
+		A2000001000000000000005F /* DashboardViewModel+Uninstall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DashboardViewModel+Uninstall.swift"; sourceTree = "<group>"; };
+		A20000010000000000000060 /* UIScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScale.swift; sourceTree = "<group>"; };
+		A20000010000000000000061 /* UninstallConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UninstallConfirmationView.swift; sourceTree = "<group>"; };
+		A20000010000000000000062 /* AIProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProviders.swift; sourceTree = "<group>"; };
+		A20000010000000000000063 /* AIProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvidersTests.swift; sourceTree = "<group>"; };
+		A20000010000000000000070 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000010000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000004 /* AgentScopeCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A30000010000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000010000000000000005 /* AgentScopeCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A30000010000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000010000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000010000000000000002 /* AgentScope */,
+				A40000010000000000000003 /* AgentScopeTests */,
+				A40000010000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000010000000000000002 /* AgentScope */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000001 /* AgentScopeApp.swift */,
+				A40000010000000000000005 /* Core */,
+				A40000010000000000000013 /* UI */,
+				A20000010000000000000070 /* Assets.xcassets */,
+			);
+			path = AgentScope;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000003 /* AgentScopeTests */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000063 /* AIProvidersTests.swift */,
+				A2000001000000000000005E /* UninstallTests.swift */,
+				A2000001000000000000005B /* ScheduleCalculatorTests.swift */,
+				A20000010000000000000059 /* BackgroundTaskScanTests.swift */,
+				A20000010000000000000057 /* VendorGroupingTests.swift */,
+				A20000010000000000000054 /* ItemExplainerTests.swift */,
+				A20000010000000000000051 /* SystemLevelCollectorsTests.swift */,
+				A2000001000000000000004E /* LiveInventoryProbeTests.swift */,
+				A2000001000000000000004C /* ThirdPartyScopeTests.swift */,
+				A20000010000000000000003 /* ServiceItemTests.swift */,
+				A20000010000000000000014 /* CommandRunnerTests.swift */,
+				A20000010000000000000015 /* LaunchAgentCollectorTests.swift */,
+				A20000010000000000000016 /* ValidityCheckerTests.swift */,
+				A20000010000000000000022 /* ProcessCollectorTests.swift */,
+				A20000010000000000000025 /* LaunchAgentControllerTests.swift */,
+				A20000010000000000000027 /* ServiceInventoryTests.swift */,
+				A20000010000000000000031 /* DashboardViewModelTests.swift */,
+				A20000010000000000000038 /* ProductionServiceInventoryTests.swift */,
+				A20000010000000000000043 /* ScheduledCollectorsTests.swift */,
+				A20000010000000000000045 /* EcosystemCollectorsTests.swift */,
+				A20000010000000000000047 /* AuditAnalysisTests.swift */,
+				A20000010000000000000049 /* AnalysisProviderTests.swift */,
+			);
+			path = AgentScopeTests;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000004 /* AgentScope.app */,
+				A20000010000000000000005 /* AgentScopeCore.framework */,
+				A20000010000000000000006 /* AgentScopeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000005 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001000000000000005D /* UninstallExecutor.swift */,
+				A2000001000000000000005C /* UninstallPlanner.swift */,
+				A20000010000000000000002 /* AgentScopeCore.swift */,
+				A20000010000000000000040 /* AuditModels.swift */,
+				A20000010000000000000007 /* ServiceItem.swift */,
+				A20000010000000000000008 /* SourceType.swift */,
+				A20000010000000000000009 /* ServiceState.swift */,
+				A20000010000000000000010 /* OperationRecord.swift */,
+				A40000010000000000000006 /* Execution */,
+				A40000010000000000000007 /* Collectors */,
+				A40000010000000000000008 /* Enrichment */,
+				A40000010000000000000009 /* Controllers */,
+				A40000010000000000000010 /* Persistence */,
+				A40000010000000000000011 /* Inventory */,
+				A40000010000000000000012 /* UI */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000006 /* Execution */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000011 /* CommandResult.swift */,
+				A20000010000000000000012 /* CommandRunner.swift */,
+				A20000010000000000000013 /* LaunchctlParser.swift */,
+			);
+			path = Execution;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000007 /* Collectors */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001000000000000005A /* ScheduleCalculator.swift */,
+				A20000010000000000000058 /* BackgroundTaskScan.swift */,
+				A20000010000000000000050 /* ResidentProcessScanner.swift */,
+				A2000001000000000000004F /* SystemLevelCollectors.swift */,
+				A20000010000000000000017 /* Collector.swift */,
+				A20000010000000000000018 /* LaunchAgentCollector.swift */,
+				A20000010000000000000041 /* LaunchdCollector.swift */,
+				A20000010000000000000042 /* ScheduledSourceCollectors.swift */,
+				A20000010000000000000044 /* EcosystemCollectors.swift */,
+				A20000010000000000000021 /* ProcessCollector.swift */,
+			);
+			path = Collectors;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000008 /* Enrichment */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000062 /* AIProviders.swift */,
+				A20000010000000000000053 /* ItemExplainer.swift */,
+				A20000010000000000000052 /* KnowledgeBase.swift */,
+				A2000001000000000000004D /* PurposeModels.swift */,
+				A2000001000000000000004B /* AppleItemFilter.swift */,
+				A2000001000000000000004A /* CodeSignatureReader.swift */,
+				A20000010000000000000019 /* ValidityChecker.swift */,
+				A20000010000000000000020 /* SignatureInspector.swift */,
+				A20000010000000000000046 /* AuditAnalysis.swift */,
+				A20000010000000000000048 /* AnalysisProvider.swift */,
+			);
+			path = Enrichment;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000009 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000023 /* LaunchAgentController.swift */,
+				A20000010000000000000028 /* ServiceControlling.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000010 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000024 /* LocalStore.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000011 /* Inventory */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000026 /* ServiceInventory.swift */,
+			);
+			path = Inventory;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000012 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A2000001000000000000005F /* DashboardViewModel+Uninstall.swift */,
+				A20000010000000000000055 /* VendorGrouping.swift */,
+				A20000010000000000000029 /* DashboardState.swift */,
+				A20000010000000000000030 /* DashboardViewModel.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A40000010000000000000013 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A20000010000000000000061 /* UninstallConfirmationView.swift */,
+				A20000010000000000000060 /* UIScale.swift */,
+				A20000010000000000000056 /* VendorGroupListView.swift */,
+				A20000010000000000000032 /* DashboardView.swift */,
+				A20000010000000000000033 /* SourceSidebar.swift */,
+				A20000010000000000000034 /* ServiceListView.swift */,
+				A20000010000000000000035 /* ServiceDetailView.swift */,
+				A20000010000000000000036 /* OperationConfirmationView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000010000000000000001 /* AgentScope */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A60000010000000000000001 /* Build configuration list for PBXNativeTarget "AgentScope" */;
+			buildPhases = (
+				A30000010000000000000001 /* Sources */,
+				A30000010000000000000002 /* Frameworks */,
+				A30000010000000000000004 /* Resources */,
+				A30000010000000000000010 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A70000010000000000000001 /* PBXTargetDependency */,
+			);
+			name = AgentScope;
+			productName = AgentScope;
+			productReference = A20000010000000000000004 /* AgentScope.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A50000010000000000000002 /* AgentScopeCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A60000010000000000000002 /* Build configuration list for PBXNativeTarget "AgentScopeCore" */;
+			buildPhases = (
+				A30000010000000000000005 /* Sources */,
+				A30000010000000000000003 /* Frameworks */,
+				A30000010000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AgentScopeCore;
+			productName = AgentScopeCore;
+			productReference = A20000010000000000000005 /* AgentScopeCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A50000010000000000000003 /* AgentScopeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A60000010000000000000003 /* Build configuration list for PBXNativeTarget "AgentScopeTests" */;
+			buildPhases = (
+				A30000010000000000000007 /* Sources */,
+				A30000010000000000000008 /* Frameworks */,
+				A30000010000000000000009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A70000010000000000000002 /* PBXTargetDependency */,
+			);
+			name = AgentScopeTests;
+			productName = AgentScopeTests;
+			productReference = A20000010000000000000006 /* AgentScopeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A80000010000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					A50000010000000000000001 = { CreatedOnToolsVersion = 27.0; };
+					A50000010000000000000002 = { CreatedOnToolsVersion = 27.0; };
+					A50000010000000000000003 = { CreatedOnToolsVersion = 27.0; TestTargetID = A50000010000000000000001; };
+				};
+			};
+			buildConfigurationList = A60000010000000000000004 /* Build configuration list for PBXProject "AgentScope" */;
+			compatibilityVersion = "Xcode 16.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000010000000000000001;
+			productRefGroup = A40000010000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000010000000000000001 /* AgentScope */,
+				A50000010000000000000002 /* AgentScopeCore */,
+				A50000010000000000000003 /* AgentScopeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A30000010000000000000004 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A10000010000000000000070 /* Assets.xcassets in Resources */, ); runOnlyForDeploymentPostprocessing = 0; };
+		A30000010000000000000006 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		A30000010000000000000009 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A30000010000000000000010 /* Embed Frameworks */ = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 10; files = (A10000010000000000000039 /* AgentScopeCore.framework in Embed Frameworks */); name = Frameworks; runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A30000010000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000010000000000000061 /* UninstallConfirmationView.swift in Sources */, A10000010000000000000060 /* UIScale.swift in Sources */, A10000010000000000000056 /* VendorGroupListView.swift in Sources */, A10000010000000000000001 /* AgentScopeApp.swift in Sources */, A10000010000000000000031 /* DashboardView.swift in Sources */, A10000010000000000000032 /* SourceSidebar.swift in Sources */, A10000010000000000000033 /* ServiceListView.swift in Sources */, A10000010000000000000034 /* ServiceDetailView.swift in Sources */, A10000010000000000000035 /* OperationConfirmationView.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		A30000010000000000000005 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000010000000000000062 /* AIProviders.swift in Sources */, A1000001000000000000005F /* DashboardViewModel+Uninstall.swift in Sources */, A1000001000000000000005D /* UninstallExecutor.swift in Sources */, A1000001000000000000005C /* UninstallPlanner.swift in Sources */, A1000001000000000000005A /* ScheduleCalculator.swift in Sources */, A10000010000000000000058 /* BackgroundTaskScan.swift in Sources */, A10000010000000000000055 /* VendorGrouping.swift in Sources */, A10000010000000000000053 /* ItemExplainer.swift in Sources */, A10000010000000000000052 /* KnowledgeBase.swift in Sources */, A10000010000000000000050 /* ResidentProcessScanner.swift in Sources */, A1000001000000000000004F /* SystemLevelCollectors.swift in Sources */, A1000001000000000000004D /* PurposeModels.swift in Sources */, A1000001000000000000004B /* AppleItemFilter.swift in Sources */, A1000001000000000000004A /* CodeSignatureReader.swift in Sources */, A10000010000000000000002 /* AgentScopeCore.swift in Sources */, A10000010000000000000040 /* AuditModels.swift in Sources */, A10000010000000000000006 /* ServiceItem.swift in Sources */, A10000010000000000000007 /* SourceType.swift in Sources */, A10000010000000000000008 /* ServiceState.swift in Sources */, A10000010000000000000009 /* OperationRecord.swift in Sources */, A10000010000000000000010 /* CommandResult.swift in Sources */, A10000010000000000000011 /* CommandRunner.swift in Sources */, A10000010000000000000012 /* LaunchctlParser.swift in Sources */, A10000010000000000000016 /* Collector.swift in Sources */, A10000010000000000000017 /* LaunchAgentCollector.swift in Sources */, A10000010000000000000041 /* LaunchdCollector.swift in Sources */, A10000010000000000000042 /* ScheduledSourceCollectors.swift in Sources */, A10000010000000000000044 /* EcosystemCollectors.swift in Sources */, A10000010000000000000046 /* AuditAnalysis.swift in Sources */, A10000010000000000000048 /* AnalysisProvider.swift in Sources */, A10000010000000000000018 /* ValidityChecker.swift in Sources */, A10000010000000000000019 /* SignatureInspector.swift in Sources */, A10000010000000000000020 /* ProcessCollector.swift in Sources */, A10000010000000000000022 /* LaunchAgentController.swift in Sources */, A10000010000000000000023 /* LocalStore.swift in Sources */, A10000010000000000000025 /* ServiceInventory.swift in Sources */, A10000010000000000000027 /* ServiceControlling.swift in Sources */, A10000010000000000000028 /* DashboardState.swift in Sources */, A10000010000000000000029 /* DashboardViewModel.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		A30000010000000000000007 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000010000000000000063 /* AIProvidersTests.swift in Sources */, A1000001000000000000005E /* UninstallTests.swift in Sources */, A1000001000000000000005B /* ScheduleCalculatorTests.swift in Sources */, A10000010000000000000059 /* BackgroundTaskScanTests.swift in Sources */, A10000010000000000000057 /* VendorGroupingTests.swift in Sources */, A10000010000000000000054 /* ItemExplainerTests.swift in Sources */, A10000010000000000000051 /* SystemLevelCollectorsTests.swift in Sources */, A1000001000000000000004E /* LiveInventoryProbeTests.swift in Sources */, A1000001000000000000004C /* ThirdPartyScopeTests.swift in Sources */, A10000010000000000000003 /* ServiceItemTests.swift in Sources */, A10000010000000000000013 /* CommandRunnerTests.swift in Sources */, A10000010000000000000014 /* LaunchAgentCollectorTests.swift in Sources */, A10000010000000000000015 /* ValidityCheckerTests.swift in Sources */, A10000010000000000000021 /* ProcessCollectorTests.swift in Sources */, A10000010000000000000024 /* LaunchAgentControllerTests.swift in Sources */, A10000010000000000000026 /* ServiceInventoryTests.swift in Sources */, A10000010000000000000030 /* DashboardViewModelTests.swift in Sources */, A10000010000000000000037 /* ProductionServiceInventoryTests.swift in Sources */, A10000010000000000000043 /* ScheduledCollectorsTests.swift in Sources */, A10000010000000000000045 /* EcosystemCollectorsTests.swift in Sources */, A10000010000000000000047 /* AuditAnalysisTests.swift in Sources */, A10000010000000000000049 /* AnalysisProviderTests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A70000010000000000000001 = {isa = PBXTargetDependency; target = A50000010000000000000002 /* AgentScopeCore */; targetProxy = A90000010000000000000001 /* PBXContainerItemProxy */; };
+		A70000010000000000000002 = {isa = PBXTargetDependency; target = A50000010000000000000002 /* AgentScopeCore */; targetProxy = A90000010000000000000002 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+
+/* Begin PBXContainerItemProxy section */
+		A90000010000000000000001 = {isa = PBXContainerItemProxy; containerPortal = A80000010000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = A50000010000000000000002; remoteInfo = AgentScopeCore; };
+		A90000010000000000000002 = {isa = PBXContainerItemProxy; containerPortal = A80000010000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = A50000010000000000000002; remoteInfo = AgentScopeCore; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFrameworksBuildPhase extras */
+		A30000010000000000000008 /* Test Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A10000010000000000000005 /* AgentScopeCore.framework in Frameworks */); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase extras */
+
+/* Begin XCBuildConfiguration section */
+		B00000010000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGNING_ALLOWED = NO; DEBUG_INFORMATION_FORMAT = dwarf; GCC_C_LANGUAGE_STANDARD = gnu17; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; }; name = Debug; };
+		B00000010000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGNING_ALLOWED = NO; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; GCC_C_LANGUAGE_STANDARD = gnu17; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; }; name = Release; };
+		B00000010000000000000003 /* App Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGNING_ALLOWED = NO; FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)"; GENERATE_INFOPLIST_FILE = YES; CURRENT_PROJECT_VERSION = 12; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_CFBundleDisplayName = AgentScope; MARKETING_VERSION = 0.3.0; INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools"; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; PRODUCT_BUNDLE_IDENTIFIER = com.example.AgentScope; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; }; name = Debug; };
+		B00000010000000000000004 /* App Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGNING_ALLOWED = NO; FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)"; GENERATE_INFOPLIST_FILE = YES; CURRENT_PROJECT_VERSION = 12; ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_CFBundleDisplayName = AgentScope; MARKETING_VERSION = 0.3.0; INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools"; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; PRODUCT_BUNDLE_IDENTIFIER = com.example.AgentScope; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; }; name = Release; };
+		B00000010000000000000005 /* Core Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGNING_ALLOWED = NO; DEFINES_MODULE = YES; DYLIB_CURRENT_VERSION = 1; DYLIB_COMPATIBILITY_VERSION = 1; DYLIB_INSTALL_NAME_BASE = "@rpath"; ENABLE_TESTABILITY = YES; FRAMEWORK_VERSION = A; GENERATE_INFOPLIST_FILE = YES; INSTALL_PATH = "@rpath"; PRODUCT_BUNDLE_IDENTIFIER = com.example.AgentScopeCore; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 6.0; }; name = Debug; };
+		B00000010000000000000006 /* Core Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGNING_ALLOWED = NO; DEFINES_MODULE = YES; DYLIB_CURRENT_VERSION = 1; DYLIB_COMPATIBILITY_VERSION = 1; DYLIB_INSTALL_NAME_BASE = "@rpath"; FRAMEWORK_VERSION = A; GENERATE_INFOPLIST_FILE = YES; INSTALL_PATH = "@rpath"; PRODUCT_BUNDLE_IDENTIFIER = com.example.AgentScopeCore; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 6.0; }; name = Release; };
+		B00000010000000000000007 /* Tests Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGNING_ALLOWED = NO; FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)"; GENERATE_INFOPLIST_FILE = YES; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks"; PRODUCT_BUNDLE_IDENTIFIER = com.example.AgentScopeTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgentScope.app/Contents/MacOS/AgentScope"; }; name = Debug; };
+		B00000010000000000000008 /* Tests Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGNING_ALLOWED = NO; FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)"; GENERATE_INFOPLIST_FILE = YES; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks"; PRODUCT_BUNDLE_IDENTIFIER = com.example.AgentScopeTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AgentScope.app/Contents/MacOS/AgentScope"; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A60000010000000000000001 /* Build configuration list for PBXNativeTarget "AgentScope" */ = {isa = XCConfigurationList; buildConfigurations = (B00000010000000000000003, B00000010000000000000004); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A60000010000000000000002 /* Build configuration list for PBXNativeTarget "AgentScopeCore" */ = {isa = XCConfigurationList; buildConfigurations = (B00000010000000000000005, B00000010000000000000006); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A60000010000000000000003 /* Build configuration list for PBXNativeTarget "AgentScopeTests" */ = {isa = XCConfigurationList; buildConfigurations = (B00000010000000000000007, B00000010000000000000008); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A60000010000000000000004 /* Build configuration list for PBXProject "AgentScope" */ = {isa = XCConfigurationList; buildConfigurations = (B00000010000000000000001, B00000010000000000000002); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = A80000010000000000000001 /* Project object */;
+}
