@@ -16,6 +16,9 @@ public enum PurposeCategory: String, Codable, Hashable, Sendable, CaseIterable {
     case userScript
     case unknown
 
+    /// `userScript` opens the uninstall path, so it is only ever assigned by local rules.
+    public static let aiAssignable: [PurposeCategory] = allCases.filter { $0 != .userScript && $0 != .unknown }
+
     public var displayName: String {
         switch self {
         case .remoteControl: return "远程控制"

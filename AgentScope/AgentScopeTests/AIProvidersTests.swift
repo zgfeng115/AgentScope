@@ -124,6 +124,35 @@ final class AIProvidersTests: XCTestCase {
         XCTAssertFalse(payload.contains("retain"))
     }
 
+    func testPurposeIsParsedOnlyFromAssignableCategories() {
+        func purpose(_ value: String) -> PurposeCategory? {
+            AnalysisResult.fromModelContent(#"{"summary":"s","purpose":"\#(value)"}"#).purpose
+        }
+        XCTAssertEqual(purpose("proxyVPN"), .proxyVPN)
+        XCTAssertEqual(purpose(" devtools "), .devTools)
+        XCTAssertNil(purpose("userScript"))
+        XCTAssertNil(purpose("unknown"))
+        XCTAssertEqual(purpose("proxyVPN（代理 / VPN / 网络）"), .proxyVPN)
+        XCTAssertEqual(purpose("远程控制"), .remoteControl)
+        XCTAssertNil(purpose("自建脚本"))
+        XCTAssertNil(purpose("代理"))
+        XCTAssertNil(AnalysisResult.fromModelContent(#"{"summary":"s"}"#).purpose)
+    }
+
+    func testPromptListsAssignablePurposesOnly() {
+        XCTAssertTrue(AnalysisPrompt.system.contains("remoteControl（远程控制）"))
+        XCTAssertTrue(AnalysisPrompt.system.contains("media"))
+        XCTAssertFalse(AnalysisPrompt.system.contains("userScript"))
+    }
+
+    func testRecordSavedBeforePurposeAndFingerprintStillDecodes() throws {
+        let json = #"{"id":"6F9619FF-8B86-D011-B42D-00C04FC964FF","serviceID":"a","analyzedAt":0,"model":"m","summary":"旧说明","dependencies":[],"risks":[],"projectUsefulness":"p","confidence":0.5,"evidence":[]}"#
+        let record = try JSONDecoder().decode(AnalysisRecord.self, from: Data(json.utf8))
+        XCTAssertEqual(record.summary, "旧说明")
+        XCTAssertNil(record.purpose)
+        XCTAssertNil(record.fingerprint)
+    }
+
     func testStoredRawJSONSummaryIsReparsed() {
         let raw = #"{"summary":"中文摘要","dependencies":[],"risks":["r"],"projectUsefulness":"p","confidence":"0.7","evidence":[]}"#
         let broken = AnalysisRecord(

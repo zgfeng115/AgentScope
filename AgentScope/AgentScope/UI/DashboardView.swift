@@ -62,7 +62,7 @@ struct DashboardView: View {
                 }
                 .disabled(viewModel.batchExplainProgress == nil && (!viewModel.canExplainWithAI || viewModel.unexplainedItems.isEmpty))
                 .help(viewModel.canExplainWithAI
-                      ? "用 AI 逐个解释 \(viewModel.unexplainedItems.count) 个只有规则说明的项目（会上传脱敏后的配置与脚本片段）"
+                      ? "用 AI 逐个解释 \(viewModel.unexplainedItems.count) 个尚未解释或需要重新分析的项目（会上传脱敏后的配置与脚本片段）"
                       : "先在「AI 设置」中配置模型和 API Key")
             }
             ToolbarItem(placement: .automatic) {

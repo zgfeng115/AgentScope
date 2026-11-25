@@ -137,4 +137,38 @@ final class CommandRunnerTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
     }
+
+    func testCommandRunnerReturnsOnTimeoutEvenWhenChildIgnoresSIGTERM() async {
+        let startedAt = Date()
+        do {
+            _ = try await CommandRunner().run(
+                executable: URL(fileURLWithPath: "/bin/sh"),
+                arguments: ["-c", "trap '' TERM; sleep 30"],
+                timeout: 0.3
+            )
+            XCTFail("Expected a timeout error")
+        } catch let error as CommandRunnerError {
+            guard case .timedOut(let result) = error else {
+                return XCTFail("Unexpected error: \(error)")
+            }
+            XCTAssertTrue(result.timedOut)
+            XCTAssertEqual(result.exitCode, CommandRunner.unknownExitCode)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+        XCTAssertLessThan(Date().timeIntervalSince(startedAt), 1.5)
+    }
+
+    func testCommandRunnerReturnsWhenAGrandchildKeepsStdoutOpen() async throws {
+        let startedAt = Date()
+        let result = try await CommandRunner().run(
+            executable: URL(fileURLWithPath: "/bin/sh"),
+            arguments: ["-c", "sleep 30 & echo hi"],
+            timeout: 10
+        )
+
+        XCTAssertEqual(result.stdout, "hi\n")
+        XCTAssertFalse(result.timedOut)
+        XCTAssertLessThan(Date().timeIntervalSince(startedAt), 4)
+    }
 }

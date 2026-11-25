@@ -54,15 +54,21 @@ struct ServiceDetailView: View {
         .alert(
             "操作提示",
             isPresented: Binding(
-                get: { viewModel.actionError != nil },
+                get: { viewModel.actionError != nil || viewModel.actionNotice != nil },
                 set: { isPresented in
-                    if !isPresented { viewModel.actionError = nil }
+                    if !isPresented {
+                        viewModel.actionError = nil
+                        viewModel.actionNotice = nil
+                    }
                 }
             )
         ) {
-            Button("好") { viewModel.actionError = nil }
+            Button("好") {
+                viewModel.actionError = nil
+                viewModel.actionNotice = nil
+            }
         } message: {
-            Text(viewModel.actionError ?? "未知错误")
+            Text(viewModel.actionError ?? viewModel.actionNotice ?? "未知错误")
         }
     }
 
@@ -263,6 +269,11 @@ struct ServiceDetailView: View {
         }
 
         if let record = viewModel.analysis(for: item.id) {
+            if viewModel.isAnalysisOutdated(for: item.id) {
+                Label("这个项目在上次分析后有改动，下面的结果可能已过期，建议重新分析。", systemImage: "clock.arrow.circlepath")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
             AnalysisRecordView(record: record, time: Self.shortTime(record.analyzedAt))
         }
     }

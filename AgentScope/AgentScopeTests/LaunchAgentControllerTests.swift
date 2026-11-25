@@ -82,6 +82,95 @@ final class LaunchAgentControllerTests: XCTestCase {
         }
     }
 
+    func testStopBootsOutKeepAliveJobInsteadOfKilling() async throws {
+        let plist = try writePlist(["Label": "com.example.agent", "KeepAlive": true])
+        defer { try? FileManager.default.removeItem(at: plist) }
+        let runner = RecordingCommandRunner()
+        let controller = try makeController(
+            runner: runner,
+            collector: SequenceCollector(results: [CollectorResult(items: [makeItem(state: .stopped)], warnings: [])])
+        )
+
+        let outcome = try await controller.stop(makeItem(state: .running, configurationPath: plist.path))
+
+        XCTAssertEqual(outcome, .unloaded)
+        let calls = await runner.recordedCalls()
+        XCTAssertEqual(calls.map(\.arguments), [["bootout", "gui/501/com.example.agent"]])
+    }
+
+    func testStopKillsJobWithoutKeepAlive() async throws {
+        let plist = try writePlist(["Label": "com.example.agent", "StartInterval": 60])
+        defer { try? FileManager.default.removeItem(at: plist) }
+        let runner = RecordingCommandRunner()
+        let controller = try makeController(
+            runner: runner,
+            collector: SequenceCollector(results: [CollectorResult(items: [makeItem(state: .stopped)], warnings: [])])
+        )
+
+        let outcome = try await controller.stop(makeItem(state: .running, configurationPath: plist.path))
+
+        XCTAssertEqual(outcome, .terminated)
+        let calls = await runner.recordedCalls()
+        XCTAssertEqual(calls.map(\.arguments), [["kill", "SIGTERM", "gui/501/com.example.agent"]])
+    }
+
+    func testStopFallsBackToBootoutWhenJobRespawnsUnderNewPID() async throws {
+        var running = makeItem(state: .running)
+        running.pid = 200
+        var respawned = makeItem(state: .running)
+        respawned.pid = 201
+        let runner = RecordingCommandRunner()
+        let controller = try makeController(
+            runner: runner,
+            collector: SequenceCollector(results: [
+                CollectorResult(items: [respawned], warnings: []),
+                CollectorResult(items: [makeItem(state: .stopped)], warnings: [])
+            ])
+        )
+
+        let outcome = try await controller.stop(running)
+
+        XCTAssertEqual(outcome, .unloaded)
+        let calls = await runner.recordedCalls()
+        XCTAssertEqual(calls.map(\.arguments).last, ["bootout", "gui/501/com.example.agent"])
+    }
+
+    func testStartBootstrapsJobThatIsNotLoaded() async throws {
+        let runner = RecordingCommandRunner(failFirst: "kickstart")
+        let controller = try makeController(
+            runner: runner,
+            collector: SequenceCollector(results: [CollectorResult(items: [makeItem(state: .running)], warnings: [])])
+        )
+
+        try await controller.start(makeItem())
+
+        let calls = await runner.recordedCalls()
+        XCTAssertEqual(calls.map(\.arguments), [
+            ["kickstart", "gui/501/com.example.agent"],
+            ["bootstrap", "gui/501", "/tmp/com.example.agent.plist"],
+            ["kickstart", "gui/501/com.example.agent"]
+        ])
+    }
+
+    func testKeepAliveDetectionAcceptsDictionaryAndRejectsFalse() throws {
+        let dictionary = try writePlist(["KeepAlive": ["SuccessfulExit": false]])
+        let off = try writePlist(["KeepAlive": false])
+        defer {
+            try? FileManager.default.removeItem(at: dictionary)
+            try? FileManager.default.removeItem(at: off)
+        }
+        XCTAssertTrue(LaunchAgentController.hasKeepAlive(configurationPath: dictionary.path))
+        XCTAssertFalse(LaunchAgentController.hasKeepAlive(configurationPath: off.path))
+        XCTAssertFalse(LaunchAgentController.hasKeepAlive(configurationPath: "/tmp/agentscope-missing.plist"))
+    }
+
+    private func writePlist(_ plist: [String: Any]) throws -> URL {
+        let url = FileManager.default.temporaryDirectory.appending(path: "agent-\(UUID().uuidString).plist")
+        let data = try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
+        try data.write(to: url)
+        return url
+    }
+
     private func makeController(
         runner: any CommandExecuting,
         collector: any Collector,
@@ -126,6 +215,11 @@ final class LaunchAgentControllerTests: XCTestCase {
 
 private actor RecordingCommandRunner: CommandExecuting {
     private var calls: [(executable: URL, arguments: [String])] = []
+    private var failFirst: String?
+
+    init(failFirst: String? = nil) {
+        self.failFirst = failFirst
+    }
 
     func run(
         executable: URL,
@@ -134,6 +228,12 @@ private actor RecordingCommandRunner: CommandExecuting {
         environment: [String: String]?
     ) async throws -> CommandResult {
         calls.append((executable, arguments))
+        if let failFirst, arguments.first == failFirst {
+            self.failFirst = nil
+            throw CommandRunnerError.nonZeroExit(
+                CommandResult(stdout: "", stderr: "", exitCode: 113, timedOut: false, duration: 0)
+            )
+        }
         return CommandResult(stdout: "", stderr: "", exitCode: 0, timedOut: false, duration: 0)
     }
 

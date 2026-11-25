@@ -171,6 +171,9 @@ public struct AnalysisRecord: Codable, Hashable, Sendable, Identifiable {
     public let confidence: Double
     public let evidence: [String]
     public let rawResponse: String?
+    public let purpose: PurposeCategory?
+    /// Nil on records saved before 0.3.1.
+    public let fingerprint: String?
 
     public init(
         id: UUID = UUID(),
@@ -183,8 +186,12 @@ public struct AnalysisRecord: Codable, Hashable, Sendable, Identifiable {
         projectUsefulness: String,
         confidence: Double,
         evidence: [String],
-        rawResponse: String? = nil
+        rawResponse: String? = nil,
+        purpose: PurposeCategory? = nil,
+        fingerprint: String? = nil
     ) {
+        self.purpose = purpose
+        self.fingerprint = fingerprint
         self.id = id
         self.serviceID = serviceID
         self.analyzedAt = analyzedAt

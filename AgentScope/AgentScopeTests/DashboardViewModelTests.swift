@@ -194,6 +194,114 @@ final class DashboardViewModelTests: XCTestCase {
         XCTAssertEqual(try store.fetchLatestAnalysis(serviceID: item.id)?.model, "test-model")
     }
 
+    func testAIPurposeFillsUnknownButNeverOverridesRules() async throws {
+        var unknown = makeItem(id: "launchdaemon:system:x", name: "x", sourceType: .launchDaemon, scope: .system)
+        unknown.purpose = .unknown
+        unknown.summarySource = .rule
+        var script = makeItem(id: "cron:user:mine", name: "mine", sourceType: .cron, scope: .user)
+        script.purpose = .userScript
+        script.summarySource = .rule
+        let store = InMemoryAnalysisStore()
+        let viewModel = makeAIViewModel(items: [unknown, script], store: store, purpose: .proxyVPN)
+
+        await viewModel.refresh()
+        await viewModel.explainUnidentifiedWithAI()
+
+        XCTAssertEqual(viewModel.items.first { $0.id == unknown.id }?.purpose, .proxyVPN)
+        XCTAssertEqual(viewModel.items.first { $0.id == script.id }?.purpose, .userScript)
+        XCTAssertTrue(viewModel.unexplainedItems.isEmpty)
+
+        await viewModel.refresh()
+        XCTAssertEqual(viewModel.items.first { $0.id == unknown.id }?.purpose, .proxyVPN)
+        XCTAssertEqual(viewModel.items.first { $0.id == unknown.id }?.summarySource, .ai)
+        XCTAssertTrue(viewModel.unexplainedItems.isEmpty)
+    }
+
+    func testItemClassifiedApartFromItsVendorSiblingsStaysReachable() async {
+        let signing = SigningInfo(signature: .developerID, teamID: "TEAM123456", organization: "Acme", signedPath: "/Library/Acme/acmed")
+        var siblings: [ServiceItem] = (1...3).map { index in
+            var item = makeItem(id: "launchdaemon:system:acme\(index)", name: "acme\(index)", sourceType: .launchDaemon, scope: .system)
+            item.signing = signing
+            item.purpose = .unknown
+            return item
+        }
+        siblings[0].purpose = .proxyVPN
+        let viewModel = makeViewModel(items: siblings)
+
+        await viewModel.refresh()
+
+        XCTAssertEqual(viewModel.purposeCounts.map(\.purpose), [.proxyVPN, .unknown])
+        viewModel.sidebarSelection = .purpose(.proxyVPN)
+        XCTAssertEqual(viewModel.visibleItems.map(\.id), [siblings[0].id])
+        viewModel.sidebarSelection = .purpose(.unknown)
+        XCTAssertEqual(viewModel.visibleItems.count, 2)
+    }
+
+    func testStoredAnalysisIsDroppedWhenItemChanged() async throws {
+        var item = makeItem(id: "launchagent:user:job", name: "job", sourceType: .launchAgent, scope: .user)
+        item.arguments = ["--new"]
+        item.summary = "规则说明"
+        item.summarySource = .rule
+        let store = InMemoryAnalysisStore()
+        try store.saveLatestAnalysis(makeRecord(serviceID: item.id, fingerprint: "0000000000000000"))
+        let viewModel = makeAIViewModel(items: [item], store: store, purpose: nil)
+
+        await viewModel.refresh()
+
+        XCTAssertEqual(viewModel.items.first?.summary, "规则说明")
+        XCTAssertEqual(viewModel.items.first?.summarySource, .rule)
+        XCTAssertTrue(viewModel.isAnalysisOutdated(for: item.id))
+        XCTAssertEqual(viewModel.unexplainedItems.map(\.id), [item.id])
+
+        await viewModel.analyze(item)
+        XCTAssertFalse(viewModel.isAnalysisOutdated(for: item.id))
+        XCTAssertTrue(viewModel.unexplainedItems.isEmpty)
+    }
+
+    func testLegacyAnalysisStaysVisibleAndIsReanalysedOnce() async throws {
+        var item = makeItem(id: "launchagent:user:old", name: "old", sourceType: .launchAgent, scope: .user)
+        item.summarySource = .rule
+        let store = InMemoryAnalysisStore()
+        try store.saveLatestAnalysis(makeRecord(serviceID: item.id, fingerprint: nil))
+        let viewModel = makeAIViewModel(items: [item], store: store, purpose: nil)
+
+        await viewModel.refresh()
+        XCTAssertEqual(viewModel.items.first?.summary, "旧 AI 说明")
+        XCTAssertFalse(viewModel.isAnalysisOutdated(for: item.id))
+        XCTAssertEqual(viewModel.unexplainedItems.map(\.id), [item.id])
+
+        await viewModel.explainUnidentifiedWithAI()
+        await viewModel.refresh()
+        XCTAssertTrue(viewModel.unexplainedItems.isEmpty)
+        XCTAssertNotNil(try store.fetchLatestAnalysis(serviceID: item.id)?.fingerprint)
+    }
+
+    private func makeRecord(serviceID: String, fingerprint: String?) -> AnalysisRecord {
+        AnalysisRecord(
+            serviceID: serviceID, analyzedAt: Date(), model: "m", summary: "旧 AI 说明", dependencies: [],
+            risks: [], projectUsefulness: "p", confidence: 0.5, evidence: [], fingerprint: fingerprint
+        )
+    }
+
+    private func makeAIViewModel(
+        items: [ServiceItem],
+        store: InMemoryAnalysisStore,
+        purpose: PurposeCategory?
+    ) -> DashboardViewModel {
+        DashboardViewModel(
+            inventory: FixedInventory(result: InventoryResult(items: items, warnings: [])),
+            controller: nil,
+            historyProvider: FixedHistoryProvider(records: []),
+            analysisProvider: StubAnalysisProvider(result: AnalysisResult(
+                summary: "新 AI 说明", dependencies: [], risks: [], projectUsefulness: "p",
+                confidence: 0.7, evidence: [], purpose: purpose
+            )),
+            analysisStore: store,
+            aiConfigurationStore: FixedAIConfigurationStore(configuration: AIModelConfiguration(model: "test-model")),
+            apiKeyStore: FixedAPIKeyStore(key: "test-key")
+        )
+    }
+
     func testSystemReadonlyFilterExcludesUserLevelReadonlyRecords() async {
         let loginItem = makeItem(
             id: "loginitem:user:helper",
@@ -731,8 +839,9 @@ private actor RecordingController: ServiceControlling {
         actions.append(.start)
     }
 
-    func stop(_ item: ServiceItem) async throws {
+    func stop(_ item: ServiceItem) async throws -> StopOutcome {
         actions.append(.stop)
+        return .terminated
     }
 
     func restart(_ item: ServiceItem) async throws {

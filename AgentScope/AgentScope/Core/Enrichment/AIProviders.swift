@@ -307,10 +307,16 @@ enum AnalysisPrompt {
       "risks": ["字符串数组，每条一句，最多 6 条"],
       "projectUsefulness": "字符串，1 到 2 句，对项目是否有用",
       "confidence": 0.8,
-      "evidence": ["字符串数组，每条一句，引用具体证据，最多 6 条"]
+      "evidence": ["字符串数组，每条一句，引用具体证据，最多 6 条"],
+      "purpose": "用途分类，只能填下面列出的英文标识之一"
     }
     confidence 必须是 0 到 1 之间的数字，不要写文字。
+    purpose 可选值：\(purposeChoices)。证据不足以判断时填 unknown，不要自创分类。
     """
+
+    static let purposeChoices = PurposeCategory.aiAssignable
+        .map { "\($0.rawValue)（\($0.displayName)）" }
+        .joined(separator: "、")
 }
 
 extension AnalysisResult {
@@ -330,7 +336,8 @@ extension AnalysisResult {
                 projectUsefulness: parsed.projectUsefulness,
                 confidence: parsed.confidence,
                 evidence: parsed.evidence,
-                rawResponse: content
+                rawResponse: content,
+                purpose: parsed.purpose
             )
         }
         return AnalysisResult(
@@ -360,7 +367,8 @@ extension AnalysisRecord {
             id: id, serviceID: serviceID, analyzedAt: analyzedAt, model: model,
             summary: result.summary, dependencies: result.dependencies, risks: result.risks,
             projectUsefulness: result.projectUsefulness, confidence: result.confidence,
-            evidence: result.evidence, rawResponse: rawResponse
+            evidence: result.evidence, rawResponse: rawResponse,
+            purpose: purpose ?? result.purpose, fingerprint: fingerprint
         )
     }
 }
@@ -372,9 +380,10 @@ struct LenientAnalysis: Decodable {
     let projectUsefulness: String
     let confidence: Double
     let evidence: [String]
+    let purpose: PurposeCategory?
 
     private enum CodingKeys: String, CodingKey {
-        case summary, dependencies, risks, projectUsefulness, confidence, evidence
+        case summary, dependencies, risks, projectUsefulness, confidence, evidence, purpose
     }
 
     init(from decoder: Decoder) throws {
@@ -384,6 +393,7 @@ struct LenientAnalysis: Decodable {
         risks = Self.list(container, .risks)
         projectUsefulness = Self.text(container, .projectUsefulness)
         evidence = Self.list(container, .evidence)
+        purpose = Self.purpose(fromText: Self.text(container, .purpose))
         if let number = try? container.decode(Double.self, forKey: .confidence) {
             confidence = Self.normalized(number)
         } else {
@@ -410,6 +420,13 @@ struct LenientAnalysis: Decodable {
             .components(separatedBy: CharacterSet(charactersIn: "\n；;"))
             .map(cleaned)
             .filter { !$0.isEmpty }
+    }
+
+    /// Accepts "proxyVPN", "proxyVPN（代理 / VPN / 网络）" or the Chinese label alone.
+    static func purpose(fromText text: String) -> PurposeCategory? {
+        let identifier = text.prefix { $0.isASCII && $0.isLetter }.lowercased()
+        return PurposeCategory.aiAssignable.first { $0.rawValue.lowercased() == identifier }
+            ?? PurposeCategory.aiAssignable.first { $0.displayName == text }
     }
 
     /// Strips list markers such as "- ", "• ", "1. ", "2、".

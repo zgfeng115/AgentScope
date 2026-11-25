@@ -33,25 +33,42 @@ public struct CommandRunner: Sendable {
         let stderrCollector = PipeOutputCollector()
         let outputGroup = DispatchGroup()
 
+        // Incremental reads: a grandchild that inherited the pipe must not keep us waiting for EOF forever.
         func drain(_ pipe: Pipe, into collector: PipeOutputCollector) {
             outputGroup.enter()
-            DispatchQueue.global(qos: .userInitiated).async {
-                collector.append(pipe.fileHandleForReading.readDataToEndOfFile())
-                outputGroup.leave()
+            pipe.fileHandleForReading.readabilityHandler = { handle in
+                let chunk = handle.availableData
+                if chunk.isEmpty {
+                    handle.readabilityHandler = nil
+                    if collector.markFinished() { outputGroup.leave() }
+                } else {
+                    collector.append(chunk)
+                }
             }
+        }
+
+        @Sendable func stopDraining() {
+            stdoutPipe.fileHandleForReading.readabilityHandler = nil
+            stderrPipe.fileHandleForReading.readabilityHandler = nil
+        }
+
+        @Sendable func partialResult(exitCode: Int32, timedOut: Bool) -> CommandResult {
+            CommandResult(
+                stdout: Self.string(from: stdoutCollector.data),
+                stderr: Self.string(from: stderrCollector.data),
+                exitCode: exitCode,
+                timedOut: timedOut,
+                duration: Date().timeIntervalSince(startedAt)
+            )
         }
 
         return try await withCheckedThrowingContinuation { continuation in
             process.terminationHandler = { process in
-                outputGroup.notify(queue: .global(qos: .userInitiated)) {
-                    let result = CommandResult(
-                        stdout: Self.string(from: stdoutCollector.data),
-                        stderr: Self.string(from: stderrCollector.data),
-                        exitCode: process.terminationStatus,
-                        timedOut: state.hasTimedOut,
-                        duration: Date().timeIntervalSince(startedAt)
-                    )
-
+                let status = process.terminationStatus
+                DispatchQueue.global(qos: .userInitiated).async {
+                    _ = outputGroup.wait(timeout: .now() + Self.outputGrace)
+                    stopDraining()
+                    let result = partialResult(exitCode: status, timedOut: state.hasTimedOut)
                     if result.timedOut {
                         state.resumeFailure(CommandRunnerError.timedOut(result), continuation: continuation)
                     } else if result.exitCode != 0 {
@@ -62,9 +79,13 @@ public struct CommandRunner: Sendable {
                 }
             }
 
+            drain(stdoutPipe, into: stdoutCollector)
+            drain(stderrPipe, into: stderrCollector)
+
             do {
                 try process.run()
             } catch {
+                stopDraining()
                 let path = executable.path
                 if (error as NSError).code == CocoaError.fileNoSuchFile.rawValue {
                     state.resumeFailure(CommandRunnerError.executableNotFound(path: path), continuation: continuation)
@@ -74,17 +95,27 @@ public struct CommandRunner: Sendable {
                 return
             }
 
-            drain(stdoutPipe, into: stdoutCollector)
-            drain(stderrPipe, into: stderrCollector)
-
+            let pid = process.processIdentifier
             let effectiveTimeout = max(timeout, 0.001)
             DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + effectiveTimeout) {
                 guard process.isRunning else { return }
                 state.markTimedOut()
                 process.terminate()
+                // Give up waiting now: a child stuck in the kernel may never exit. Its exit status is unknown.
+                state.resumeFailure(
+                    CommandRunnerError.timedOut(partialResult(exitCode: Self.unknownExitCode, timedOut: true)),
+                    continuation: continuation
+                )
+                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + Self.killGrace) {
+                    if process.isRunning { kill(pid, SIGKILL) }
+                }
             }
         }
     }
+
+    static let unknownExitCode: Int32 = -1
+    private static let killGrace: TimeInterval = 1
+    private static let outputGrace: TimeInterval = 2
 
     private static func string(from data: Data) -> String {
         String(decoding: data, as: UTF8.self)
@@ -101,10 +132,21 @@ private final class PipeOutputCollector: @unchecked Sendable {
         return storage
     }
 
+    private var finished = false
+
     func append(_ data: Data) {
         lock.lock()
         storage.append(data)
         lock.unlock()
+    }
+
+    /// True only for the first EOF, so the output group is left exactly once.
+    func markFinished() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        guard !finished else { return false }
+        finished = true
+        return true
     }
 }
 

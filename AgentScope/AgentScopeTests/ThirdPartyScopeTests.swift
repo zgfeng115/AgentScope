@@ -88,6 +88,31 @@ final class ThirdPartyScopeTests: XCTestCase {
         XCTAssertEqual(info?.signature, .apple)
     }
 
+    func testSigningThatHangsIsAbandonedAndTheScanStillFinishes() async {
+        let items = (1...3).map { index in
+            ServiceItem(
+                id: "launchagent:user:com.example.hang\(index)", name: "hang\(index)", sourceType: .launchAgent, scope: .user,
+                label: "com.example.hang\(index)", configurationPath: "/tmp/com.example.hang\(index).plist",
+                programPath: "/opt/example/hang\(index)"
+            )
+        }
+        let reader = HangingSignatureReader()
+        let inventory = ProductionServiceInventory(
+            collectors: [StaticCollector(items: items)],
+            signatureReader: reader,
+            signingTimeout: 0.2
+        )
+
+        let startedAt = Date()
+        let result = await inventory.collect()
+
+        XCTAssertLessThan(Date().timeIntervalSince(startedAt), 1.5)
+        XCTAssertEqual(result.items.count, 3)
+        XCTAssertTrue(result.items.allSatisfy { $0.signing == nil })
+        XCTAssertEqual(result.warnings, [ProductionServiceInventory.signingTimeoutWarning])
+        XCTAssertEqual(reader.calls, 1, "after the first timeout the rest are skipped")
+    }
+
     func testProductionInventoryAttachesSigningAndDropsAppleItems() async {
         let thirdParty = ServiceItem(
             id: "launchdaemon:global:com.docker.vmnetd", name: "vmnetd", sourceType: .launchDaemon, scope: .global,
@@ -198,6 +223,25 @@ final class ThirdPartyScopeTests: XCTestCase {
         XCTAssertEqual(overrides["com.docker.helper"], false)
         XCTAssertEqual(overrides["com.example.off"], true)
         XCTAssertEqual(overrides["com.example.legacy"], true)
+    }
+}
+
+final class HangingSignatureReader: CodeSignatureReading, @unchecked Sendable {
+    private let lock = NSLock()
+    private var count = 0
+
+    var calls: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return count
+    }
+
+    func read(path: String) -> SigningInfo? {
+        lock.lock()
+        count += 1
+        lock.unlock()
+        Thread.sleep(forTimeInterval: 3)
+        return nil
     }
 }
 

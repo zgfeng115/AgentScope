@@ -41,6 +41,32 @@ final class AnalysisProviderTests: XCTestCase {
         XCTAssertTrue(payload.contains("nohup /usr/bin/true"))
     }
 
+    func testFingerprintFollowsCommandAndFileChangesButNotRunState() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appending(path: "AgentScopeFingerprint-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let script = directory.appending(path: "job.sh")
+        try "echo one\n".write(to: script, atomically: true, encoding: .utf8)
+        var item = ServiceItem(
+            id: "launchagent:user:job", name: "job", sourceType: .launchAgent, scope: .user,
+            programPath: script.path, arguments: ["--once"]
+        )
+        let builder = AnalysisPayloadBuilder()
+        let original = builder.fingerprint(for: item)
+
+        item.state = .running
+        item.pid = 42
+        XCTAssertEqual(builder.fingerprint(for: item), original)
+
+        try "echo one; echo two\n".write(to: script, atomically: true, encoding: .utf8)
+        let afterEdit = builder.fingerprint(for: item)
+        XCTAssertNotEqual(afterEdit, original)
+
+        item.arguments = ["--loop"]
+        XCTAssertNotEqual(builder.fingerprint(for: item), afterEdit)
+    }
+
     func testLocalStoreReplacesLatestAnalysisForSameService() throws {
         let directory = FileManager.default.temporaryDirectory
             .appending(path: "AgentScopeAnalysisStore-\(UUID().uuidString)")

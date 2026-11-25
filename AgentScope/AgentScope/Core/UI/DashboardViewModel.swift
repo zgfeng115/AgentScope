@@ -16,7 +16,14 @@ public final class DashboardViewModel: ObservableObject {
     @Published public private(set) var aiConfiguration: AIModelConfiguration
     @Published public private(set) var aiKeyConfigured: Bool
     @Published public private(set) var analysisResults: [String: AnalysisRecord] = [:]
+    /// Items changed since their stored AI analysis was made.
+    @Published public private(set) var outdatedAnalysisIDs: Set<String> = []
+    /// Analyses saved before 0.3.1: still shown, re-run once by the next batch to gain a purpose and fingerprint.
+    private var legacyAnalysisIDs: Set<String> = []
+    private let payloadBuilder = AnalysisPayloadBuilder()
     @Published public var actionError: String?
+    /// Informational result of a successful action that the user should know about.
+    @Published public var actionNotice: String?
     @Published public private(set) var deepScanInProgress = false
     @Published public private(set) var lastDeepScanAt: Date?
     @Published public var deepScanError: String?
@@ -84,7 +91,7 @@ public final class DashboardViewModel: ObservableObject {
         return items
             .filter { item in
                 matchesSourceFilter(item)
-                    && (purposeFilter == nil || item.purpose == purposeFilter)
+                    && (purposeFilter == nil || (item.purpose ?? .unknown) == purposeFilter)
                     && matchesSearch(item, query: query)
             }
             .sorted { lhs, rhs in
@@ -139,10 +146,10 @@ public final class DashboardViewModel: ObservableObject {
 
     /// Purposes present in the inventory, in display order, with their app/vendor group counts.
     public var purposeCounts: [(purpose: PurposeCategory, count: Int)] {
-        let groups = VendorGrouping.groups(from: items)
-        let counts = Dictionary(grouping: groups, by: \.purpose).mapValues(\.count)
+        // Counted the way the purpose filter selects (per item), so every classified item has a sidebar entry.
+        let byPurpose = Dictionary(grouping: items, by: { $0.purpose ?? .unknown })
         return PurposeCategory.allCases.compactMap { purpose in
-            counts[purpose].map { (purpose, $0) }
+            byPurpose[purpose].map { (purpose, VendorGrouping.groups(from: $0).count) }
         }
     }
 
@@ -157,6 +164,8 @@ public final class DashboardViewModel: ObservableObject {
     public func refresh() async {
         loadState = .loading
         let result = await inventory.collect()
+        outdatedAnalysisIDs = []
+        legacyAnalysisIDs = []
         items = result.items.map(applyingStoredAIExplanation)
         warnings = result.warnings
 
@@ -167,9 +176,9 @@ public final class DashboardViewModel: ObservableObject {
         loadState = result.warnings.isEmpty ? .loaded : .partiallyFailed
     }
 
-    /// Items whose explanation only comes from generic rules — candidates for AI explanation.
+    /// Items whose explanation only comes from generic rules, or from an AI analysis that predates fingerprints.
     public var unexplainedItems: [ServiceItem] {
-        items.filter { $0.summarySource == .rule }
+        items.filter { $0.summarySource == .rule || legacyAnalysisIDs.contains($0.id) }
     }
 
     public var canExplainWithAI: Bool {
@@ -230,10 +239,32 @@ public final class DashboardViewModel: ObservableObject {
             return item
         }
         analysisResults[item.id] = record
+        guard let fingerprint = record.fingerprint else {
+            legacyAnalysisIDs.insert(item.id)
+            return applying(record, to: item)
+        }
+        guard fingerprint == payloadBuilder.fingerprint(for: item) else {
+            outdatedAnalysisIDs.insert(item.id)
+            return item
+        }
+        return applying(record, to: item)
+    }
+
+    /// The knowledge base and local rules win; AI only fills what they left open.
+    private func applying(_ record: AnalysisRecord, to item: ServiceItem) -> ServiceItem {
+        guard item.summarySource != .knowledgeBase else { return item }
         var explained = item
         explained.summary = record.summary
         explained.summarySource = .ai
+        if (item.purpose ?? .unknown) == .unknown,
+           let purpose = record.purpose, PurposeCategory.aiAssignable.contains(purpose) {
+            explained.purpose = purpose
+        }
         return explained
+    }
+
+    public func isAnalysisOutdated(for serviceID: String) -> Bool {
+        outdatedAnalysisIDs.contains(serviceID)
     }
 
     public var supportsDeepScan: Bool {
@@ -275,6 +306,11 @@ public final class DashboardViewModel: ObservableObject {
         do {
             if let record = try analysisStore.fetchLatestAnalysis(serviceID: serviceID) {
                 analysisResults[serviceID] = record.reparsedIfNeeded()
+                if let fingerprint = record.fingerprint,
+                   let item = items.first(where: { $0.id == serviceID }),
+                   fingerprint != payloadBuilder.fingerprint(for: item) {
+                    outdatedAnalysisIDs.insert(serviceID)
+                }
             }
         } catch {
             actionError = "读取 AI 分析结果失败：\(message(for: error))"
@@ -363,13 +399,16 @@ public final class DashboardViewModel: ObservableObject {
             projectUsefulness: result.projectUsefulness,
             confidence: result.confidence,
             evidence: result.evidence,
-            rawResponse: result.rawResponse
+            rawResponse: result.rawResponse,
+            purpose: result.purpose,
+            fingerprint: payloadBuilder.fingerprint(for: item)
         )
         try analysisStore.saveLatestAnalysis(record)
         analysisResults[item.id] = record
-        if let index = items.firstIndex(where: { $0.id == item.id }), items[index].summarySource != .knowledgeBase {
-            items[index].summary = record.summary
-            items[index].summarySource = .ai
+        outdatedAnalysisIDs.remove(item.id)
+        legacyAnalysisIDs.remove(item.id)
+        if let index = items.firstIndex(where: { $0.id == item.id }) {
+            items[index] = applying(record, to: items[index])
         }
     }
 
@@ -389,12 +428,15 @@ public final class DashboardViewModel: ObservableObject {
 
         operatingServiceID = item.id
         actionError = nil
+        actionNotice = nil
         do {
             switch action {
             case .start:
                 try await controller.start(item)
             case .stop:
-                try await controller.stop(item)
+                if try await controller.stop(item) == .unloaded {
+                    actionNotice = "这个任务会被 launchd 自动拉起，已把它从 launchd 卸载。下次登录会重新运行；要永久不运行请用「停用」。"
+                }
             case .restart:
                 try await controller.restart(item)
             case .enable:

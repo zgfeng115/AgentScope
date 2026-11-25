@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import Security
 
@@ -165,6 +166,7 @@ public struct AnalysisResult: Codable, Hashable, Sendable {
     public let confidence: Double
     public let evidence: [String]
     public let rawResponse: String?
+    public let purpose: PurposeCategory?
 
     public init(
         summary: String,
@@ -173,8 +175,10 @@ public struct AnalysisResult: Codable, Hashable, Sendable {
         projectUsefulness: String,
         confidence: Double,
         evidence: [String],
-        rawResponse: String? = nil
+        rawResponse: String? = nil,
+        purpose: PurposeCategory? = nil
     ) {
+        self.purpose = purpose
         self.summary = summary
         self.dependencies = dependencies
         self.risks = risks
@@ -274,6 +278,27 @@ public struct AnalysisPayloadBuilder: Sendable {
             sections.append("目标源码（\(programPath)）：\n\(AnalysisRedactor.redact(content))")
         }
         return sections.joined(separator: "\n\n")
+    }
+
+    /// Changes when the item's command or the files sent to the model change; ignores run state.
+    public func fingerprint(for item: ServiceItem) -> String {
+        var parts = [item.configurationPath ?? "", item.programPath ?? "", item.arguments.joined(separator: "\u{1F}")]
+        if let configurationPath = item.configurationPath {
+            parts.append(fileStamp(configurationPath))
+        }
+        if let programPath = item.programPath, programPath != item.configurationPath, isLikelyTextSource(programPath) {
+            parts.append(fileStamp(programPath))
+        }
+        let digest = SHA256.hash(data: Data(parts.joined(separator: "\u{1E}").utf8))
+        return digest.prefix(8).map { String(format: "%02x", $0) }.joined()
+    }
+
+    private func fileStamp(_ path: String) -> String {
+        let resolved = URL(fileURLWithPath: path).resolvingSymlinksInPath().path
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: resolved) else { return "missing" }
+        let modified = (attributes[.modificationDate] as? Date)?.timeIntervalSince1970 ?? 0
+        let size = (attributes[.size] as? NSNumber)?.int64Value ?? 0
+        return "\(Int64(modified * 1000)):\(size)"
     }
 
     private func metadata(for item: ServiceItem) -> String {
